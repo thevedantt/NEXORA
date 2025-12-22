@@ -1,26 +1,160 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant modern (&:is(.modern *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Sidebar Theme Variables */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Aesthetic Theme (Default) - Bone White & Garnet */
+  --background: #f9f6ee;
+  --foreground: #781c2e;
+  --card: #f9f6ee;
+  --card-foreground: #781c2e;
+  --popover: #f9f6ee;
+  --popover-foreground: #781c2e;
+  --primary: #781c2e;
+  --primary-foreground: #f9f6ee;
+  --secondary: #eaddcf;
+  --secondary-foreground: #781c2e;
+  --muted: #eaddcf;
+  --muted-foreground: #781c2e;
+  --accent: #eaddcf;
+  --accent-foreground: #781c2e;
+  --destructive: #ef4444;
+  --destructive-foreground: #f9f6ee;
+  --border: #781c2e;
+  --input: #781c2e;
+  --ring: #781c2e;
+  --radius: 0.625rem;
+
+  /* Sidebar - Aesthetic Mapping */
+  --sidebar: #f9f6ee;
+  --sidebar-foreground: #781c2e;
+  --sidebar-primary: #781c2e;
+  --sidebar-primary-foreground: #f9f6ee;
+  --sidebar-accent: #eaddcf;
+  --sidebar-accent-foreground: #781c2e;
+  --sidebar-border: #eaddcf;
+  --sidebar-ring: #781c2e;
+
+  /* Chart - Aesthetic */
+  --chart-1: 346 62% 29%;
+  /* #781c2e converted to HSL approx */
+  --chart-2: 346 40% 50%;
+  --chart-3: 346 30% 70%;
+  --chart-4: 34 25% 86%;
+  /* #eaddcf */
+  --chart-5: 34 20% 75%;
+
+  /* Functional Chart Colors - Aesthetic */
+  --color-revenue: #781c2e;
+  --color-orders: #bc6c25;
+  --color-pending: #e9c46a;
+  --color-processing: #f4a261;
+  --color-shipped: #2a9d8f;
+  --color-delivered: #606c38;
+  --color-total: #264653;
+  --color-rate: #2a9d8f;
+  --color-stockLevel: #781c2e;
+}
+
+.modern {
+  /* Modern Theme - Burnt Red & Vintage Neutral */
+  --background: #570010;
+  --foreground: #dad9d2;
+  --card: #570010;
+  --card-foreground: #dad9d2;
+  --popover: #570010;
+  --popover-foreground: #dad9d2;
+  --primary: #dad9d2;
+  --primary-foreground: #570010;
+  --secondary: #701a2a;
+  --secondary-foreground: #dad9d2;
+  --muted: #701a2a;
+  --muted-foreground: #dad9d2;
+  --accent: #701a2a;
+  --accent-foreground: #dad9d2;
+  --destructive: #990000;
+  --destructive-foreground: #dad9d2;
+  --border: #dad9d2;
+  --input: #dad9d2;
+  --ring: #dad9d2;
+
+  /* Sidebar - Modern Mapping */
+  --sidebar: #570010;
+  --sidebar-foreground: #dad9d2;
+  --sidebar-primary: #dad9d2;
+  --sidebar-primary-foreground: #570010;
+  --sidebar-accent: #701a2a;
+  --sidebar-accent-foreground: #dad9d2;
+  --sidebar-border: #701a2a;
+  --sidebar-ring: #dad9d2;
+
+  /* Chart - Modern */
+  --chart-1: 60 4% 84%;
+  /* #dad9d2 */
+  --chart-2: 60 4% 70%;
+  --chart-3: 346 62% 27%;
+  /* #701a2a */
+  --chart-4: 346 50% 40%;
+  --chart-5: 346 40% 50%;
+
+  /* Functional Chart Colors - Modern */
+  --color-revenue: #dad9d2;
+  --color-orders: #701a2a;
+  --color-pending: #f4a261;
+  --color-processing: #457b9d;
+  --color-shipped: #a8dadc;
+  --color-delivered: #2a9d8f;
+  --color-total: #dad9d2;
+  --color-rate: #e9c46a;
+  --color-stockLevel: #f1faee;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground transition-colors duration-500 ease-in-out;
+  }
 }

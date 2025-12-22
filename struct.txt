@@ -1,0 +1,22 @@
+Frontend (Next.js + Tailwind + ShadCN)
+│
+├── Vendor Panel
+│   ├── Dashboard
+│   ├── Products
+│   ├── Orders
+│   └── Analytics
+│
+├── Admin Panel
+│   ├── Marketplace Dashboard
+│   ├── Vendor Management
+│   ├── Orders & Logistics
+│   ├── AI Insights
+│   └── Reports
+│
+Backend (API / Server Actions)
+│
+├── Auth (Role-based: Admin / Vendor)
+├── Orders Service
+├── Inventory Service
+├── Vendor Performance Engine
+└── AI Services (Forecasting, Routing, Chat Analysis)
