@@ -1,55 +1,120 @@
-# Nexora Marketplace Operations Platform
+# Nexora
 
-Nexora is a next-generation marketplace management dashboard built for performance, scalability, and AI-driven insights. It serves both Administrators and Vendors with dedicated, role-protected interfaces.
+**Nexora** is an AI-ready marketplace operations platform designed to bring clarity, control, and intelligence to multi-vendor marketplaces.
 
-## 🚀 Tech Stack
+It replaces scattered tools, spreadsheets, and manual coordination with a single, structured operational system for vendors and administrators.
 
-- **Framework**: [Next.js 15+ (App Router)](https://nextjs.org) with Turbopack
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + Radix UI (Shadcn)
-- **Database**: PostgreSQL (via [Neon Serverless](https://neon.tech))
-- **ORM**: [Drizzle ORM](https://orm.drizzle.team)
-- **Authentication**: [Clerk](https://clerk.com)
-- **AI**: Google Gemini (via AI SDK)
+---
 
-## 🛠️ Features
+![Nexora Landing Page](public/nxlp.png)
 
-- **Role-Based Access Control**: Strict separation between Admin and Vendor portals.
-- **Real-time Analytics**: Dashboard with KPIs, charts, and activity feeds.
-- **Order Management**: Comprehensive order tracking and status updates.
-- **AI Assistant**: Context-aware AI companion (`NexoAI`) for operational queries.
-- **Vendor Portal**: Dedicated tools for vendors to manage inventory and fulfillment.
+## ✨ What is Nexora?
 
-## 📦 Getting Started
+Nexora acts as a **control layer** for marketplace operations:
 
-1. **Clone the repository**
-2. **Install dependencies**:
+- **Vendors** execute daily operations (orders, products).
+- **Admins** maintain visibility, intervene in issues, and ensure system health.
+- **AI (NexoAI)** assists with contextual insights and guidance (human-in-the-loop).
+
+The system is designed to be calm, scalable, and production-ready.
+
+---
+
+## 🧱 Core Features
+
+### Vendor Panel
+- **Inventory Management**: Add and track products with ease.
+- **Order Fulfillment**: Streamlined process from Pending to Delivered.
+- **Analytics**: Real-time tracked revenue and fulfillment rates.
+
+### Admin Panel
+- **Global Oversight**: Monitor all vendors and orders in one view.
+- **Intervention**: Reassign or update stuck orders.
+- **System Health**: View critical system-wide alerts.
+
+### AI Layer (NexoAI)
+- **Context-Aware Chat**: Specialized operational assistant.
+- **Data-Driven**: Has read-access to live DB stats to answer questions like "How is my revenue?".
+- **Safe**: Suggestions only, no autonomous writing without confirmation.
+
+---
+
+## 🧠 Design Principles
+
+- **Role-Based Access**: Explicit separation between Admin and Vendor data.
+- **Calm UI**: No noisy dashboards; progressive disclosure of information.
+- **Assistive AI**: AI enhances the user, it doesn't replace them.
+- **Architecture-First**: Scalable database schema and secure API patterns.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15+ (App Router), Tailwind CSS, Shadcn UI
+- **Backend**: API Routes (Serverless), Server Actions
+- **Database**: PostgreSQL (Neon Serverless)
+- **ORM**: Drizzle ORM
+- **Auth**: Clerk (Role-based middleware)
+- **AI**: Google Gemini (via Vercel AI SDK)
+
+---
+
+## 📂 Project Structure
+
+```bash
+src/
+├── app/
+│   ├── (vendor)/       # Vendor-specific routes
+│   ├── (admin)/        # Admin-specific routes
+│   └── api/            # Secure API endpoints
+├── components/         # Shared UI components
+├── config/             # Database & Schema config
+├── lib/                # Utilities & Helpers
+└── data/               # Static/Seed data
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` (or `.env.local`) file with the following keys:
+
+```env
+# Database (Neon/Postgres)
+DATABASE_URL="postgres://..."
+
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
+CLERK_SECRET_KEY="sk_test_..."
+
+# AI (Google Gemini)
+GEMINI_API_KEY="AIzaSy..."
+```
+
+---
+
+## 🚀 Getting Started
+
+1. **Install Dependencies**
    ```bash
    npm install
    ```
-3. **Environment Setup**:
-   Create a `.env` file with the following keys:
-   ```env
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=...
-   CLERK_SECRET_KEY=...
-   DATABASE_URL=postgres://...
-   GEMINI_API_KEY=...
-   ```
-4. **Run Development Server**:
-   ```bash
-   npm run dev
-   ```
-5. **Database Migration**:
+
+2. **Database Setup**
+   Push the schema to your Neon database:
    ```bash
    npx drizzle-kit push
    ```
 
-## 🔒 Security
+3. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
 
-- **Authentication**: Powered by Clerk with middleware usage for route protection.
-- **API Protection**: API routes verify user roles (Admin/Vendor).
-- **Environment**: No hardcoded secrets.
+   The app will be available at: `http://localhost:3000`
 
-## 📄 License
+---
 
-Proprietary - Nexora Inc.
+## 👨‍💻 Developed By
+
+Vedant Talekar
