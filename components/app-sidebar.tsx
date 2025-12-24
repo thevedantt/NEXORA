@@ -7,7 +7,8 @@ import {
     Settings,
     ShoppingCart,
     Package,
-    BarChart3
+    BarChart3,
+    Sparkles
 } from "lucide-react"
 
 import {
@@ -53,6 +54,11 @@ const items = [
         title: "Analytics",
         url: "/vendor/analytics",
         icon: BarChart3,
+    },
+    {
+        title: "NexoAI",
+        url: "/nexoai",
+        icon: Sparkles,
     },
     {
         title: "Settings",

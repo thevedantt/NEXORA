@@ -58,9 +58,9 @@ export function ProductsTable({ products, isLoading, onEdit }: ProductsTableProp
                                 key={product.id}
                                 className="group hover:bg-muted/30 transition-colors"
                             >
-                                <TableCell className="font-medium">{product.name}</TableCell>
+                                <TableCell className="font-medium text-primary">{product.name}</TableCell>
                                 <TableCell className="text-muted-foreground font-mono text-xs">{product.sku}</TableCell>
-                                <TableCell>${product.price}</TableCell>
+                                <TableCell className="font-medium">{product.price}</TableCell>
                                 <TableCell>{product.stock}</TableCell>
                                 <TableCell><StockBadge status={product.status} /></TableCell>
                                 <TableCell className="text-right">

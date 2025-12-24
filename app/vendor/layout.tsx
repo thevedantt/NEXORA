@@ -1,11 +1,22 @@
+"use client";
+
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { useAIContext } from "@/lib/ai-context"
+import { useEffect } from "react"
 
 export default function VendorLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    // Ensure context is set even if individual pages miss it
+    const { setUserRole } = useAIContext();
+
+    useEffect(() => {
+        setUserRole("vendor");
+    }, []);
+
     return (
         <SidebarProvider defaultOpen={false}>
             <AppSidebar />

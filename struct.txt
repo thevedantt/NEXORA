@@ -20,3 +20,8 @@ Backend (API / Server Actions)
 ├── Inventory Service
 ├── Vendor Performance Engine
 └── AI Services (Forecasting, Routing, Chat Analysis)
+
+uchihaleader0135_db_user
+MTVEO9Zxoz5NEsk1
+mongodb+srv://uchihaleader0135_db_user:MTVEO9Zxoz5NEsk1@nexora-cluster.uvzeepx.mongodb.net/?appName=nexora-cluster
+model="gemini-2.5-flash"

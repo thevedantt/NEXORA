@@ -35,23 +35,21 @@ export function ThemeToggle() {
     }
 
     return (
-        <TooltipProvider delayDuration={0}>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={toggleTheme}
-                        className="h-6 w-6 text-muted-foreground hover:text-foreground hover:bg-transparent"
-                    >
-                        <Palette className="h-4 w-4" />
-                        <span className="sr-only">Toggle Theme</span>
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                    <p>{isModern ? "Switch to Aesthetic" : "Switch to Modern"}</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleTheme}
+                    className="h-6 w-6 text-muted-foreground hover:text-foreground hover:bg-transparent"
+                >
+                    <Palette className="h-4 w-4" />
+                    <span className="sr-only">Toggle Theme</span>
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+                <p>{isModern ? "Switch to Aesthetic" : "Switch to Modern"}</p>
+            </TooltipContent>
+        </Tooltip>
     )
 }

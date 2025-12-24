@@ -26,7 +26,7 @@ export function ActivityFeed({ data }: ActivityFeedProps) {
                 <CardDescription>Live operational updates</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="space-y-4"> // reduced spacing for compactness
+                <div className="space-y-4">
                     {data.map((item) => (
                         <div key={item.id} className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0">
                             <div className={cn(

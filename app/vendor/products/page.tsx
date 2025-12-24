@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ProductsService } from "@/services/products.service";
 import { Product } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,10 @@ import { ProductsTable } from "./_components/products-table";
 import { ProductFormDialog } from "./_components/product-form-dialog";
 import { EmptyState } from "./_components/empty-state";
 import ProductsLoading from "./loading";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useUserDB } from "@/context/UserContext";
 
 export default function VendorProductsPage() {
+    const { userDB } = useUserDB();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [lowStockCount, setLowStockCount] = useState(0);
@@ -20,24 +21,25 @@ export default function VendorProductsPage() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [productToEdit, setProductToEdit] = useState<Product | null>(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [productsData, count] = await Promise.all([
-                    ProductsService.getAllProducts(),
-                    ProductsService.getLowStockCount()
-                ]);
-                setProducts(productsData);
-                setLowStockCount(count);
-            } catch (error) {
-                console.error("Failed to fetch products", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const vendorId = userDB?.vendorId || undefined;
+            const productsData = await ProductsService.getAllProducts(vendorId);
+            setProducts(productsData);
 
+            const lowStock = productsData.filter(p => p.status === "Low Stock" || p.stock < 10).length;
+            setLowStockCount(lowStock);
+        } catch (error) {
+            console.error("Failed to fetch products", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [userDB]);
+
+    useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     const handleAddProduct = () => {
         setProductToEdit(null);
@@ -49,7 +51,7 @@ export default function VendorProductsPage() {
         setIsDialogOpen(true);
     };
 
-    if (loading) return <ProductsLoading />;
+    if (loading && products.length === 0) return <ProductsLoading />;
 
     return (
         <div className="flex flex-col h-full w-full max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500 pb-10">
@@ -66,9 +68,9 @@ export default function VendorProductsPage() {
 
             {/* 4. Stock Awareness Section */}
             {lowStockCount > 0 && (
-                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-md p-3 flex items-center gap-3 text-sm text-yellow-700 dark:text-yellow-400">
+                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-md p-3 flex items-center gap-3 text-sm text-yellow-700 dark:text-yellow-400 font-medium">
                     <AlertCircle className="h-4 w-4" />
-                    <span className="font-medium">{lowStockCount} products are running low on stock. Check inventory.</span>
+                    <span>{lowStockCount} products are running low on stock. Check inventory.</span>
                 </div>
             )}
 
@@ -88,6 +90,7 @@ export default function VendorProductsPage() {
                 open={isDialogOpen}
                 onOpenChange={setIsDialogOpen}
                 productToEdit={productToEdit}
+                onSuccess={fetchData}
             />
         </div>
     );

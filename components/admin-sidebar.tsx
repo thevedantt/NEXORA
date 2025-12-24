@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
     LayoutDashboard,
@@ -8,7 +9,8 @@ import {
     ShoppingCart,
     AlertTriangle,
     Settings,
-    Shield
+    Shield,
+    Sparkles
 } from "lucide-react"
 
 import {
@@ -34,6 +36,7 @@ import {
 } from "@/components/ui/tooltip"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Separator } from "@/components/ui/separator"
+import { UserButton, useUser } from "@clerk/nextjs"
 
 const items = [
     {
@@ -57,6 +60,11 @@ const items = [
         icon: AlertTriangle,
     },
     {
+        title: "NexoAI",
+        url: "/nexoai",
+        icon: Sparkles,
+    },
+    {
         title: "Settings",
         url: "/admin/settings",
         icon: Settings,
@@ -65,7 +73,14 @@ const items = [
 
 export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
     const pathname = usePathname()
-    const { isMobile, setOpenMobile } = useSidebar()
+    const { user } = useUser()
+    const { isMobile, openMobile, setOpenMobile } = useSidebar()
+
+    const handleLinkClick = () => {
+        if (isMobile && openMobile) {
+            setOpenMobile(false)
+        }
+    }
 
     return (
         <Sidebar collapsible="icon" {...props} className="border-r border-border bg-sidebar/50 backdrop-blur-sm">
@@ -86,17 +101,13 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton
                                         asChild
-                                        tooltip={item.title}
                                         isActive={pathname === item.url}
                                         className="hover:bg-accent hover:text-accent-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground transition-colors duration-200"
                                     >
-                                        <a
-                                            href={item.url}
-                                            onClick={() => isMobile && setOpenMobile(false)}
-                                        >
+                                        <Link href={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
@@ -106,18 +117,25 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
             </SidebarContent>
             <SidebarFooter className="p-2 border-t border-sidebar-border/50 gap-2">
                 <div className="flex items-center gap-3 p-2 rounded-md group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0">
-                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
-                        AD
+                    <div className="flex items-center justify-center">
+                        <UserButton
+                            afterSignOutUrl="/"
+                            appearance={{
+                                elements: {
+                                    avatarBox: "h-8 w-8"
+                                }
+                            }}
+                        />
                     </div>
                     <div className="flex flex-col text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                        <span className="font-semibold">Administrator</span>
-                        <span className="text-xs text-muted-foreground">Nexora Ops</span>
+                        <span className="font-semibold truncate">{user?.fullName || "Admin User"}</span>
+                        <span className="text-[10px] font-medium uppercase text-[#781c2e]/70 tracking-wider">Administrator</span>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between px-2 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2">
-                    <ThemeToggle />
-                    <TooltipProvider delayDuration={0}>
+                <TooltipProvider delayDuration={0}>
+                    <div className="flex items-center justify-between px-2 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2">
+                        <ThemeToggle />
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <SidebarTrigger className="h-6 w-6 text-muted-foreground hover:text-foreground hover:bg-transparent" />
@@ -126,8 +144,8 @@ export function AdminSidebar(props: React.ComponentProps<typeof Sidebar>) {
                                 <p>Toggle sidebar</p>
                             </TooltipContent>
                         </Tooltip>
-                    </TooltipProvider>
-                </div>
+                    </div>
+                </TooltipProvider>
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>

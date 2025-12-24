@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { VendorKpis } from "./_components/kpi-cards";
 import { OrderStatusProgress } from "./_components/order-status-progress";
 import { RecentOrders } from "./_components/recent-orders";
@@ -8,33 +8,45 @@ import { QuickActions } from "./_components/quick-actions";
 import { VendorService } from "@/services/vendor.service";
 import { KPI, Order, OrderStatusCount } from "@/types";
 import VendorLoading from "./loading";
+import { useUserDB } from "@/context/UserContext";
+import { useAIContext } from "@/lib/ai-context";
 
 export default function VendorDashboard() {
+    const { userDB } = useUserDB();
     const [kpis, setKpis] = useState<KPI[]>([]);
     const [orders, setOrders] = useState<Order[]>([]);
     const [statusCounts, setStatusCounts] = useState<OrderStatusCount[]>([]);
     const [loading, setLoading] = useState(true);
+    const { setPageName, setContextData } = useAIContext();
+
+    const fetchData = useCallback(async () => {
+        try {
+            // If we have a vendorId in DB, use it, otherwise the API will pick a default for demo
+            const vendorId = userDB?.vendorId || undefined;
+
+            const data = await VendorService.getDashboardData(vendorId);
+
+            setKpis(data.kpis);
+            setOrders(data.orders);
+            setStatusCounts(data.statusCounts);
+
+            // Set AI Context
+            setPageName("Vendor Dashboard");
+            setContextData({
+                totalOrders: data.kpis.find((k: any) => k.title === "Total Orders")?.value,
+                revenue: data.kpis.find((k: any) => k.title === "Revenue")?.value,
+                recentOrders: data.orders.length
+            });
+        } catch (error) {
+            console.error("Failed to fetch dashboard data", error);
+        } finally {
+            setLoading(false);
+        }
+    }, [userDB]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [kpiData, orderData, statusData] = await Promise.all([
-                    VendorService.getKPIs(),
-                    VendorService.getRecentOrders(),
-                    VendorService.getOrderStatusCounts(),
-                ]);
-                setKpis(kpiData);
-                setOrders(orderData);
-                setStatusCounts(statusData);
-            } catch (error) {
-                console.error("Failed to fetch dashboard data", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     if (loading) return <VendorLoading />;
 
@@ -62,7 +74,7 @@ export default function VendorDashboard() {
 
                 {/* Quick Actions */}
                 <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
-                    <QuickActions />
+                    <QuickActions onActionComplete={fetchData} />
                 </div>
             </div>
         </div>

@@ -1,12 +1,22 @@
+"use client";
 
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AdminSidebar } from "@/components/admin-sidebar"
+import { useAIContext } from "@/lib/ai-context"
+import { useEffect } from "react"
 
 export default function AdminLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    // Ensure context is set even if individual pages miss it
+    const { setUserRole } = useAIContext();
+
+    useEffect(() => {
+        setUserRole("admin");
+    }, []);
+
     return (
         <SidebarProvider defaultOpen={true}>
             <AdminSidebar />
